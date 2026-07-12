@@ -1,0 +1,22 @@
+{
+  "video": "/Users/lucbeck/Desktop/p2r-lite/data/demo/demo_take1.mov",
+  "frame": 0,
+  "points": [
+    [
+      965,
+      322
+    ],
+    [
+      1068,
+      214
+    ],
+    [
+      1237,
+      321
+    ],
+    [
+      1148,
+      426
+    ]
+  ]
+}
