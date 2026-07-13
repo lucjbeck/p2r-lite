@@ -1,10 +1,10 @@
 # P2R-Lite: One Human Video Is Enough to Teach a Robot to Judge Itself
 
-A replication of **[Points2Reward](https://www.engineering.upenn.edu/~dineshj/publication/shipoints-2-reward/shipoints-2-reward.pdf)** (Shi, Smith, Qian, Jayaraman — Penn GRASP) on a ~$100 SO-101 robot arm, built solo over one summer.
+A replication of **[Points2Reward](https://www.engineering.upenn.edu/~dineshj/publication/shipoints-2-reward/shipoints-2-reward.pdf)** (Shi, Smith, Qian, Jayaraman — Penn GRASP) on a ~$250 SO-101 robot arm, built solo.
 
 ![Point tracks on the human demo](media/demo_tracked.gif)
 
-*The single human demonstration, with 15 tracked points. Where those points end up in the final frame **is** the goal — the only supervision anything in this project ever gets.*
+*A single human demonstration, with 15 tracked points. Where those points end up in the final frame sets the goal the only supervision the robot every needs.*
 
 ## Results in one image
 
@@ -13,16 +13,16 @@ A replication of **[Points2Reward](https://www.engineering.upenn.edu/~dineshj/pu
 Three policies, identical training recipe, differing **only** in which episodes they learned from:
 
 - Trained on **all** of the robot's own mixed-quality attempts → **35%** success (exactly its training data's success rate)
-- Trained on the **17 episodes the reward ranked highest** → **60%** success — nearly double, with **zero human labels**
+- Trained on the **17 episodes the reward ranked highest (top 1/3)** → **60%** success — nearly double, with **zero human labels**
 - Trained on 17 **random** episodes (control) → **20%** — proving the selection did the work, not the smaller dataset
 
 Preregistered before training ([M3_Prereg.md](M3_Prereg.md)); top-k vs random: p = 0.011, Fisher's exact.
 
-## The idea, in plain language
+## The premise
 
-Robots learn well from demonstrations, but demonstrations are expensive — someone has to operate the robot. A robot's *own* attempts are free, but most of them are bad, and training on bad attempts teaches bad habits. The missing piece is a cheap way to tell good attempts from bad ones **without a human watching**.
+Robots learn well from demonstrations, but demonstrations are expensive. Someone has to operate the robot. A robot's *own* attempts are free, but most of them are bad, and training on bad attempts teaches bad habits. The missing piece is a cheap way to tell good attempts from bad ones **without a human watching**.
 
-Points2Reward's answer: film a person doing the task **once**. Track a handful of points on the object through that video. Where the points end up in the last frame defines "done." Then, for every robot attempt, track the same kind of points and measure how close they get to that goal. That distance — one number per frame — is the reward.
+Points2Reward's answer: film a person doing the task **once**. Track a handful of points on the object through that video. Where the points end up in the last frame defines "success." Then, for every robot attempt, track the same kind of points and measure how close they get to that goal. That distance, one number per frame, is the reward.
 
 ![Success vs failure, scored live](media/success_vs_failure.gif)
 
@@ -87,10 +87,10 @@ SO-101 follower arm (Feetech STS3215 servos) · Logitech Brio overhead camera ·
 
 ## Honest limitations
 
-- When the gripper occludes the block, the tracked centroid wobbles — visible as noise in mid-episode reward. Final-frame reward is robust to it.
+- When the gripper occludes the block, the tracked centroid wobbles (visible as noise in mid-episode reward). Final-frame reward is robust to it.
 - One episode ended with the block touching the zone's edge: labeled a failure by my written rule, scored "almost" (−21 px) by the reward. Continuous rewards and binary labels genuinely disagree at boundaries — for filtering, arguably the reward is right.
 - Top-k > all-episodes showed a large trend (60% vs 35%) but at N=20/arm reached only p = 0.10; the preregistered top-k > random comparison is the statistically confirmed result.
-- One task, one scene, one camera. Generalization is what the paper's DINOv2 machinery buys and what this replication deliberately postponed.
+- One task, one scene, one camera. Missing generalization via DINOv2 machinery as seen in the paper
 
 ## Next
 
@@ -104,4 +104,4 @@ The loop this enables: the current best policy records fresh attempts → the re
 
 ---
 
-*Independent replication by Luc Beck (Penn EE). All credit for the method to the Points2Reward authors — this project exists because their paper made me want to see it work on my own desk.*
+*Independent replication by Luc Beck (Penn EE + AI). All credit for the method to the Points2Reward authors — this project exists because their paper made me want to see it work on my own desk.*
